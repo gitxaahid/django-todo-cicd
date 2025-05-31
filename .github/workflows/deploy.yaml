@@ -1,0 +1,50 @@
+name: Django CI/CD
+
+on:
+  push:
+    branches: [ develop ]  # Triggers on push to main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    env:
+      IMAGE_NAME: ${{ secrets.todo-emg }}/django-todo:latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Run Django tests
+        run: |
+          python manage.py test
+
+      - name: Log in to DockerHub
+        run: echo "${{ secrets.xaahid@123 }}" | docker login -u "${{ secrets.dockerxaahid }}" --password-stdin
+
+      - name: Build and push Docker image
+        run: |
+          docker build -t $IMAGE_NAME .
+          docker push $IMAGE_NAME
+
+     # - name: Deploy to EC2
+      #  uses: appleboy/ssh-action@master
+       # with:
+        #  host: ${{ secrets.EC2_HOST }}
+         # username: ubuntu
+         # key: ${{ secrets.EC2_SSH_KEY }}
+           # script: |
+            # cd django-todo-cicd
+            # git pull origin main
+           # docker-compose down
+           # docker-compose pull
+            # docker-compose up -d --build
