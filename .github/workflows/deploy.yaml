@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      IMAGE_NAME: ${{ secrets.DOCKER_USERNAM }}/django-todo:latest
+      IMAGE_NAME: ${{ secrets.DOCKER_USERNAME }}/django-todo:latest
 
     steps:
       - name: Checkout code
